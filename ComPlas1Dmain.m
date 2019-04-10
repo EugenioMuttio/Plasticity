@@ -70,3 +70,4 @@ SIGMA = [sigma
 istep=10;
 incrSigma = SIGMA/istep;
 incrStrain = iStrain(YOUNG_M,SIGMA,istep);
+
