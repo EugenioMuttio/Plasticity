@@ -24,7 +24,7 @@ clear all
 YOUNG_M = 2.00E+11 ;
 % Poisson's coefficient
 % -----------------------
-POISSON = 0.26 ;
+POISSON = 0.3 ;
 % Hardening/softening modulus
 % ---------------------------
 HARDSOFT_MOD = -1.5 ;
