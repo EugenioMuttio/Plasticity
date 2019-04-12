@@ -60,21 +60,13 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 3.50E+08;
-SIGMA = [sigma
-        -sigma
-        sigma];
+SIGMA = 3.50E+08 ;
 
 % Number of time increments for each load state
 % --------------------------------------- 
 istep=10;
-matprop=[YOUNG_M,YIELD_STRESS];
-
-STRAIN = iStrain(YOUNG_M,SIGMA,istep);
-
-sigma_vec=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
-
-
-
-
-
+incrSigma = SIGMA/istep;
+incrStrain = delta()
+%Sigpath = [linspace(0,SIGMA(1),istep) 
+ %           linspace(SIGMA(1),SIGMA(2),2*istep) 
+  %          linspace(SIGMA(2),SIGMA(3),2*istep)] ;
