@@ -68,6 +68,13 @@ SIGMA = [sigma
 % Number of time increments for each load state
 % --------------------------------------- 
 istep=10;
-incrSigma = SIGMA/istep;
-incrStrain = iStrain(YOUNG_M,SIGMA,istep);
+matprop=[YOUNG_M,YIELD_STRESS];
+
+STRAIN = iStrain(YOUNG_M,SIGMA,istep);
+
+sigma_vec=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+
+
+
+
 
