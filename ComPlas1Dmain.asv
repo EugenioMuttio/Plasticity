@@ -60,14 +60,14 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 3.50E+08;
+sigma = 3.00E+08;
 SIGMA = [sigma
         -sigma*1.5
-        sigma*1.1];
+        sigma*1.5];
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=50;
+istep=20;
 matprop=[YOUNG_M,YIELD_STRESS];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
