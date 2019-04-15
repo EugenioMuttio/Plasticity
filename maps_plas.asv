@@ -14,7 +14,12 @@ f=abs(sigma)-sigma_y;
 eps_p_rate=0;
 if abs(sigma_n1)>sigma_y
     sigma=sigma_y*sign(sigma_n1);
-    gamma=eps_rate*sign(sigma_rate);
+    
+    gamma=eps_rate*sign(sigma_n1);
+
+    
+
+
 else
     gamma=0;
 
@@ -22,7 +27,7 @@ end
 
 eps_p_rate=gamma*sign(sigma_n1);
 eps_p_n1=eps_p_rate*delta_t+eps_p_n;
-
+%sigma_n1=E*(eps_n1+eps_p_n1);
 sigma_n1=sigma;
 
 

@@ -37,7 +37,7 @@ H = -1.5 ;
 
 % Yield stress
 % ------------
-YIELD_STRESS = 2.50E+08 ;
+YIELD_STRESS = 2.0E+08 ;
 
 
 % SOFTENING/HARDENING TYPE
@@ -62,17 +62,26 @@ nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
 sigma = 3.50E+08;
 SIGMA = [sigma
-        -sigma
-        sigma];
+        -sigma*1.5
+        sigma*1.1];
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=10;
+istep=50;
 matprop=[YOUNG_M,YIELD_STRESS];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
-sigma_vec=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+[strain_vec,sigma_vec]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+
+plot(strain_vec,sigma_vec,'-o');
+
+%%TEST
+nstrain=size(strain_vec);
+strstr=zeros(nstrain(1),2);
+strstr(:,1)=strain_vec;
+strstr(:,2)=sigma_vec;
+grid on;
 
 
 

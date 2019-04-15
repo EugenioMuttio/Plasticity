@@ -13,7 +13,8 @@ eps_rate=[];
 eps_pvec=zeros(size(STRAIN));
 sigma_vec=zeros(size(STRAIN));
 strain_vec=zeros(size(STRAIN));
-
+%%TEST
+strstr=zeros(size(STRAIN),size(STRAIN));
 for i=1:size(STRAIN)-1
     i=i+1;
     eps_n=STRAIN(i-1);
@@ -24,7 +25,7 @@ for i=1:size(STRAIN)-1
     
     [eps_pvec(i),sigma_vec(i)]=maps_plas(matprop,eps_rate(i),eps_n,eps_n1,eps_p_n,eps_p_n1,delta_t);
     strain_vec(i)=STRAIN(i)+eps_pvec(i);
-
+    %strstr(i,i)=(strain_vec(i),sigma_vec(i));
     
 end
 
