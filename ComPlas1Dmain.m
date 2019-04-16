@@ -21,7 +21,7 @@ clear all
 
 % YOUNG's MODULUS
 % ---------------
-YOUNG_M = 2.00E+11 ;
+YOUNG_M = 20000 ;
 
 % Poisson's coefficient
 % -----------------------
@@ -29,29 +29,33 @@ POISSON = 0.3 ;
 
 % Plastic modulus
 % ---------------------------
-K = -1.5 ;
+K =YOUNG_M/4  ;
 
 % Kinematic Hardening/softening modulus
 % ---------------------------
-H = -1.5 ;
+H = 0.0 ;
 
 % Yield stress
 % ------------
-YIELD_STRESS = 2.0E+08 ;
+YIELD_STRESS = 20 ;
 
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'EXPONENTIAL' ; %{LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+
 % VISCOUS/INVISCID
 % ------------------------
 VISCOUS = 'NO' ;
+
 % Viscous coefficient ----
 % ------------------------
 eta = 1 ;
+
 % TimeTotal (initial = 0) ----
 % ------------------------
 TimeTotal = 10 ;
+
 % Integration coefficient v (for mid-point rule)
 % ------------------------
 v = 1 ;
@@ -60,7 +64,7 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 3.50E+08;
+sigma = 35;
 SIGMA = [sigma
         -sigma*1.5
         sigma*1.1];
@@ -68,7 +72,24 @@ SIGMA = [sigma
 % Number of time increments for each load state
 % --------------------------------------- 
 istep=50;
-matprop=[YOUNG_M,YIELD_STRESS];
+
+% ------------------------
+% ****************
+% FUNCTION CALLS
+% ****************- 
+switch  HARDTYPE
+    case 'PERFECT'
+        hard_type = 0  ;
+    case 'LINEAR'
+        hard_type = 1  ;
+    case 'EXPONENTIAL'
+        hard_type = 2  ;
+    otherwise
+        hard_type = 0  ;
+end
+
+
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,H];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
