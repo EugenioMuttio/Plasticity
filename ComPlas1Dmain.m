@@ -42,7 +42,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -66,8 +66,8 @@ nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
 sigma = 35;
 SIGMA = [sigma
-        -sigma*1.5
-        sigma*1.1];
+        -sigma
+        sigma];
 
 % Number of time increments for each load state
 % --------------------------------------- 

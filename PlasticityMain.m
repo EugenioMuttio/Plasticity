@@ -36,14 +36,14 @@ for i=1:size(STRAIN)-1
     
     int_vars_nn1=[eps_n eps_n1 eps_p_n eps_p_n1 xi_n xi_n1 xibar_n xibar_n1];
     
-    [sigma_vec(i),int_vars_nn1]=maps_plas(matprop,eps_rate(i),int_vars_nn1,delta_t);
+    [sigma_vec(i),int_vars_nn1]=maps_plas(matprop,sigma_vec(i-1),eps_rate(i),int_vars_nn1,delta_t);
     
     %strains
     eps_pvec(i)=int_vars_nn1(4);
     xi_vec(i)=int_vars_nn1(6);
     xibar_n1(i)=int_vars_nn1(8);
     
-    strain_vec(i)=STRAIN(i)+eps_pvec(i);
+    strain_vec(i)=STRAIN(i);
 
     
 end
