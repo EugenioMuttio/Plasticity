@@ -22,8 +22,9 @@ xibar_n1=int_vars_n(8);
 sigma_nt=E*eps_n;
 sigma_n1t=E*eps_n1;
 
-%Elastic Sigma rate used only for the sign, to know when the rate 
+%ELASTIC Sigma rate used only for the sign, to know when the rate 
 %changes from load -> unload
+%and for return mapping algorithm
 sigma_rate_trial=(sigma_n1t-sigma_nt)/delta_t;
 
 
@@ -51,10 +52,11 @@ if hard_type==0
         end
     end
     
-    %Plastic sttrain computation
+    %Plastic strain computation - Backward Euler (BE) time integration
     eps_p_rate=gamma*sign(sigma_trial);
-    eps_p_n1=eps_p_rate*delta_t+eps_p_n;
+    eps_p_n1=eps_p_n+eps_p_rate*delta_t;
     
+    %Return Mapping Algorithm
     %Sigma rate computed as Saracibar slide 1 page 30 
     sigma_rate=sigma_rate_trial-E*eps_p_rate;
     
@@ -76,7 +78,7 @@ elseif hard_type==1
     if abs(round(sigma_trial-qbar,8))>=(round(sigma_lim,8))
         sigma_n=sigma_y*sign(sigma_trial-qbar)-q*sign(sigma_trial-qbar)+qbar;
         
-        % Sigma condition f(sigma)=0
+        % Sigma rate condition df/d(sigma)*sigma_trial>0
         if (sigma_rate_trial)*sign(sigma_n-qbar)>0
             gamma=E*eps_rate*sign(sigma_trial-qbar)/(E+K+H);
         else
@@ -84,21 +86,22 @@ elseif hard_type==1
         end
     end
     
-    %Plastic sttrain computation
-    eps_p_rate=gamma*sign(sigma_trial-qbar);
-    eps_p_n1=eps_p_rate*delta_t+eps_p_n;
+    %Plastic strain computation - Backward Euler (BE) time integration
+    eps_p_rate=gamma*sign(sigma_trial);
+    eps_p_n1=eps_p_n+eps_p_rate*delta_t
 
+    %Return Mapping Algorithm
     %Sigma rate computed as Saracibar slide 1 page 30 
     sigma_rate=sigma_rate_trial-E*eps_p_rate;
 
     %New Sigma computed by considering the plastic strains
     sigma_n1=(sigma_rate)*delta_t+sigma_n;
 
-    %Internal variables computation
+    %Internal variables (n+1) computation
     xi_rate=abs(gamma);
-    xi_n1=xi_rate*delta_t+xi_n;
+    xi_n1=xi_n+xi_rate*delta_t;
     xibar_rate=gamma*sign(sigma_n-qbar);
-    xibar_n1=xibar_rate*delta_t+xibar_n;
+    xibar_n1=xibar_n+xibar_rate*delta_t;
     
     %Sigma model verification (**this part could be modified to optimize)
     q=-K*xi_n1;
@@ -115,7 +118,6 @@ end
 
 
 %%UPDATE VALUES%%
-%sigma_n1=sigma;
 int_vars_n1(1)=eps_n;
 int_vars_n1(2)=eps_n1;
 int_vars_n1(3)=eps_p_n;
