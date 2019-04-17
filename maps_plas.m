@@ -5,8 +5,9 @@ E=matprop(1);
 sigma_y=matprop(2);
 hard_type=matprop(3);
 K=matprop(4);
+H=matprop(5);
 
-%Internal Variables
+%Internal Variables from last step
 int_vars_n1=int_vars_n;
 eps_n=int_vars_n(1);
 eps_n1=int_vars_n(2);
@@ -17,42 +18,50 @@ xi_n1=int_vars_n(6);
 xibar_n=int_vars_n(7);
 xibar_n1=int_vars_n(8);
 
+%Elastic Sigma using the GIVEN strains
 sigma_nt=E*eps_n;
 sigma_n1t=E*eps_n1;
 
+%Elastic Sigma rate used only for the sign, to know when the rate 
+%changes from load -> unload
 sigma_rate_trial=(sigma_n1t-sigma_nt)/delta_t;
 
 
-%Sigma OBTAINED from the GIVEN strains to compare and test
+%Sigma trial is the corresponding to the PREVIOUS step
+%Starts with zero, then changes to elastic and then depends on the model.
 sigma_trial=sigma_n;
 %Parameter to include in the plasticity models
 gamma=0; 
-%Sigma COMPUTED from the plasticity model
-%sigma=sigma_y; %Initialized with a value
-
 
 
 if hard_type==0
 %-- Perfect Plasticity ---------------------------------------------------
 %-------------------------------------------------------------------------
     % Sigma condition f(sigma)=0
+    % sigma trial is the previous one (**maybe this can change to optimize
+    % the code implemented by using the sigma of this step)
     if abs(sigma_trial)>=sigma_y
         sigma_n=sigma_y*sign(sigma_trial);
     
-        %sigma_rate_trial=(sigma-sigma_n)/delta_t;
-        % Sigma rate condition df(sigma)>0
+        % Sigma rate condition df/d(sigma)*sigma_trial>0
         if (sigma_rate_trial)*sign(sigma_n)>0
             gamma=eps_rate*sign(sigma_trial);
         else
             gamma=0;
-
         end
     end
+    
+    %Plastic sttrain computation
     eps_p_rate=gamma*sign(sigma_trial);
     eps_p_n1=eps_p_rate*delta_t+eps_p_n;
+    
+    %Sigma rate computed as Saracibar slide 1 page 30 
     sigma_rate=sigma_rate_trial-E*eps_p_rate;
     
+    %New Sigma computed by considering the plastic strains
     sigma_n1=(sigma_rate)*delta_t+sigma_n;
+    
+    %Sigma model verification (**this part could be modified to optimize)
     if abs(sigma_n1)>sigma_y
         sigma_n1=sigma_y*sign(sigma_trial);
     end
@@ -61,22 +70,44 @@ elseif hard_type==1
 %-- LINEAR HARDENING -----------------------------------------------------
 %-------------------------------------------------------------------------
     q=-K*xi_n;
+    qbar=H*xibar_n;
     sigma_lim=sigma_y-q;
-    if abs(sigma_trial)>(sigma_lim)
-        sigma_trial=sigma_y*sign(sigma_trial)-q*sign(sigma_trial);
-        gamma=E*eps_rate*sign(sigma_rate)/(E+K);
-        sigma=(sigma_rate-gamma*sign(sigma_trial))*delta_t+sigma_trial;
+    % Sigma condition f(sigma)=0
+    if abs(round(sigma_trial-qbar,8))>=(round(sigma_lim,8))
+        sigma_n=sigma_y*sign(sigma_trial-qbar)-q*sign(sigma_trial-qbar)+qbar;
         
-    else
-        gamma=0;
-
+        % Sigma condition f(sigma)=0
+        if (sigma_rate_trial)*sign(sigma_n-qbar)>0
+            gamma=E*eps_rate*sign(sigma_trial-qbar)/(E+K+H);
+        else
+            gamma=0;
+        end
     end
     
-    eps_p_rate=gamma*sign(sigma_trial);
+    %Plastic sttrain computation
+    eps_p_rate=gamma*sign(sigma_trial-qbar);
     eps_p_n1=eps_p_rate*delta_t+eps_p_n;
-    
+
+    %Sigma rate computed as Saracibar slide 1 page 30 
+    sigma_rate=sigma_rate_trial-E*eps_p_rate;
+
+    %New Sigma computed by considering the plastic strains
+    sigma_n1=(sigma_rate)*delta_t+sigma_n;
+
+    %Internal variables computation
     xi_rate=abs(gamma);
     xi_n1=xi_rate*delta_t+xi_n;
+    xibar_rate=gamma*sign(sigma_n-qbar);
+    xibar_n1=xibar_rate*delta_t+xibar_n;
+    
+    %Sigma model verification (**this part could be modified to optimize)
+    q=-K*xi_n1;
+    qbar=H*xibar_n1;
+    sigma_lim=sigma_y-q;
+    
+    if abs(sigma_n1-qbar)>sigma_lim
+        sigma_n1=sigma_y*sign(sigma_trial-qbar)-q*sign(sigma_trial-qbar)+qbar;
+    end
     
     
 end

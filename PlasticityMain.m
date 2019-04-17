@@ -41,7 +41,7 @@ for i=1:size(STRAIN)-1
     %strains
     eps_pvec(i)=int_vars_nn1(4);
     xi_vec(i)=int_vars_nn1(6);
-    xibar_n1(i)=int_vars_nn1(8);
+    xibar_vec(i)=int_vars_nn1(8);
     
     strain_vec(i)=STRAIN(i);
 

@@ -29,11 +29,11 @@ POISSON = 0.3 ;
 
 % Plastic modulus
 % ---------------------------
-K =YOUNG_M/4  ;
+K =YOUNG_M/4;
 
 % Kinematic Hardening/softening modulus
 % ---------------------------
-H = 0.0 ;
+Hmod = YOUNG_M/4;
 
 % Yield stress
 % ------------
@@ -42,7 +42,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -71,7 +71,7 @@ SIGMA = [sigma
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=50;
+istep=20;
 
 % ------------------------
 % ****************
@@ -89,7 +89,7 @@ switch  HARDTYPE
 end
 
 
-matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,H];
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,Hmod];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
