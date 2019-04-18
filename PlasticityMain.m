@@ -14,6 +14,7 @@ eps_rate=[];
 eps_pvec=zeros(size(STRAIN));
 xi_vec=zeros(size(STRAIN));
 xibar_vec=zeros(size(STRAIN));
+gamma_vec=zeros(size(STRAIN));
 
 sigma_vec=zeros(size(STRAIN));
 strain_vec=zeros(size(STRAIN));
@@ -34,7 +35,11 @@ for i=1:size(STRAIN)-1
     xibar_n=xibar_vec(i-1);
     xibar_n1=xibar_vec(i);
     
-    int_vars_nn1=[eps_n eps_n1 eps_p_n eps_p_n1 xi_n xi_n1 xibar_n xibar_n1];
+    %internal variable: gamma
+    gamma_n=gamma_vec(i-1);
+    gamma_n1=gamma_vec(i);
+    
+    int_vars_nn1=[eps_n eps_n1 eps_p_n eps_p_n1 xi_n xi_n1 xibar_n xibar_n1 gamma_n gamma_n1];
     
     [sigma_vec(i),int_vars_nn1]=maps_plas(matprop,sigma_vec(i-1),eps_rate(i),int_vars_nn1,delta_t);
     
@@ -42,6 +47,7 @@ for i=1:size(STRAIN)-1
     eps_pvec(i)=int_vars_nn1(4);
     xi_vec(i)=int_vars_nn1(6);
     xibar_vec(i)=int_vars_nn1(8);
+    gamma_vec(i)=int_vars_nn1(10);
     
     strain_vec(i)=STRAIN(i);
 

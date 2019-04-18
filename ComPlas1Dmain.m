@@ -27,13 +27,17 @@ YOUNG_M = 20000 ;
 % -----------------------
 POISSON = 0.3 ;
 
-% Plastic modulus
+% Isotropic modulus
 % ---------------------------
 K =YOUNG_M/4;
 
-% Kinematic Hardening/softening modulus
+% Kinematic modulus
 % ---------------------------
-Hmod = YOUNG_M/4;
+HMod =YOUNG_M/4;
+
+% Modulus for Exponential Hardening
+% ---------------------------
+DeltaMod = 2.5;
 
 % Yield stress
 % ------------
@@ -42,7 +46,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -89,13 +93,16 @@ switch  HARDTYPE
 end
 
 
-matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,Hmod];
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
 [strain_vec,sigma_vec]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
 
+hold on
 plot(strain_vec,sigma_vec,'-o');
+
+
 
 %%TEST
 nstrain=size(strain_vec);
