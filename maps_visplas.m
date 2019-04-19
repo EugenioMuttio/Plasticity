@@ -120,9 +120,9 @@ elseif hard_type==2
         ftrial=abs(sigma_trial-qbar)-sigma_y+q;
         if (sigma_rate_trial)*sign(sigma_trial)>0
             %Material parameters for evaluation inside NR
-            mat_param=[xi_n E H K delta sigma_y sigma_inf];
+            mat_param=[xi_n E H K delta sigma_y sigma_inf eta delta_t];
             %Newton-Rapshon
-            gamma_n1=NR_1D(func,dfdxi,ftrial,mat_param);
+            gamma_n1=NR_1Dvis(func,dfdxi,ftrial,mat_param);
             
         else
             gamma_n1=0;

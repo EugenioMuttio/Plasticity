@@ -37,7 +37,7 @@ HMod =0;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
-DeltaMod = 2.5;
+DeltaMod = 1.5;
 
 % Yield stress
 % ------------
