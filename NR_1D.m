@@ -17,7 +17,7 @@ g_res=1;
 %Tolerance
 tol=1*10^(-12);
 %Max Iterations
-Max_Iter=50;
+Max_Iter=100;
 
 while (abs(g_res)>tol && k<Max_Iter)
     xi_inc=xi_n+gamma_n1;
