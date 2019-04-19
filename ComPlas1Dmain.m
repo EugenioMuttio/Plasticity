@@ -29,7 +29,7 @@ POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =YOUNG_M/4;
+K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
@@ -37,7 +37,7 @@ HMod =YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
-DeltaMod = 2.5;
+DeltaMod = 0.0;
 
 % Yield stress
 % ------------
@@ -46,15 +46,15 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'NO' ;
+VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 1 ;
+eta = 3000 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -92,8 +92,16 @@ switch  HARDTYPE
         hard_type = 0  ;
 end
 
+switch  VISCOUS
+    case 'NO'
+        visc = 0  ;
+    case 'YES'
+        visc = 1  ;
+    otherwise
+        visc = 0  ;
+end
 
-matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod];
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
