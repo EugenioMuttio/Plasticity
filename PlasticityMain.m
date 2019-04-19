@@ -12,7 +12,7 @@ delta_t=TimeTotal/istep/5;
 eps_rate=[];
 
 %viscous
-visc=matprop(6);
+visc=matprop(7);
 
 eps_pvec=zeros(size(STRAIN));
 xi_vec=zeros(size(STRAIN));
@@ -44,7 +44,7 @@ for i=1:size(STRAIN)-1
     
     int_vars_nn1=[eps_n eps_n1 eps_p_n eps_p_n1 xi_n xi_n1 xibar_n xibar_n1 gamma_n gamma_n1];
     
-    if visc==1
+    if visc==0
         [sigma_vec(i),int_vars_nn1]=maps_plas(matprop,sigma_vec(i-1),eps_rate(i),int_vars_nn1,delta_t);
     else
         [sigma_vec(i),int_vars_nn1]=maps_visplas(matprop,sigma_vec(i-1),eps_rate(i),int_vars_nn1,delta_t);

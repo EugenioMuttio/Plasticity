@@ -33,7 +33,7 @@ K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
-HMod =YOUNG_M/4;
+HMod =0;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
@@ -46,7 +46,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -54,11 +54,11 @@ VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 5000 ;
+eta = 0.00000001 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
-TimeTotal = 5 ;
+TimeTotal = 100 ;
 
 % Integration coefficient v (for mid-point rule)
 % ------------------------
@@ -68,7 +68,7 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 50;
+sigma = 35;
 SIGMA = [sigma
         -sigma
         sigma];

@@ -105,21 +105,20 @@ elseif hard_type==2
     %Derivative Exponential Saturation Law Function for NR
     dfdxi=@(xi,delta,K)(delta*exp(-delta*xi))+K;
     
+    sigma_trial=E*(eps_n1-eps_p_n);
+    
     %Exponential saturation law
     q=-func(xi_n,sigma_inf,sigma_y,delta,K);
     qbar=H*xibar_n;
     sigma_lim=sigma_y-q;
     
     % Sigma condition f(sigma)=0
-    if abs(round(sigma_n-qbar,8))>=(round(sigma_lim,8))
-         
-        sigma_n=sigma_y*sign(sigma_trial-qbar)-q*sign(sigma_trial-qbar)+qbar;
-        % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (sigma_rate_trial)*sign(sigma_trial-qbar)>0
-            %Nonlinear Problem, then Newton-Raphson method is employed to
-            %compute the plastic multiplier gamma 
-            
-            ftrial=(abs(sigma_trial-qbar)-sigma_y+q)*sign(sigma_n-qbar);
+    if abs(round(sigma_trial-qbar,8))<=(round(sigma_lim,8))  
+        sigma_n1=sigma_trial;
+        eps_p_n1=eps_p_n;
+    else
+        ftrial=abs(sigma_trial-qbar)-sigma_y+q;
+        if (sigma_rate_trial)*sign(sigma_trial)>0
             %Material parameters for evaluation inside NR
             mat_param=[xi_n E H K delta sigma_y sigma_inf];
             %Newton-Rapshon
@@ -128,37 +127,18 @@ elseif hard_type==2
         else
             gamma_n1=0;
         end
+        sigma_n1=sigma_trial-gamma_n1*delta_t*E*sign(sigma_trial-qbar);
+        eps_p_n1=eps_p_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         
     end
     
-    
-    %Plastic strain computation - Backward Euler (BE) time integration
-    eps_p_rate=gamma_n1*sign(sigma_n);
-    eps_p_n1=eps_p_n+eps_p_rate*delta_t;
-
-    %Return Mapping Algorithm
-    %Sigma rate computed as Saracibar slide 1 page 30 
-    sigma_rate=sigma_rate_trial-E*eps_p_rate;
-
-    %New Sigma computed by considering the plastic strains
-    sigma_n1=(sigma_rate)*delta_t+sigma_n;
-    
+        
     %Internal variables (n+1) computation
     xi_rate=abs(gamma_n1);
     xi_n1=xi_n+xi_rate*delta_t;
     xibar_rate=gamma_n1*sign(sigma_n1-qbar);
     xibar_n1=xibar_n+xibar_rate*delta_t;
-        
-    %Exponential saturation law
-    q=-func(xi_n1,sigma_inf,sigma_y,delta,K);
-    qbar=H*xibar_n1;
-    sigma_lim=sigma_y-q;
-    
-    % Sigma condition f(sigma)=0
-    if abs(round(sigma_n1-qbar,8))>=(round(sigma_lim,8))
-        sigma_n1=sigma_y*sign(sigma_trial-qbar)-q*sign(sigma_trial-qbar)+qbar;
-    end
-    
+       
 end
 
 
