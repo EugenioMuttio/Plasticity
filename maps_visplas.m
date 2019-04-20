@@ -94,7 +94,7 @@ elseif hard_type==1
         %Internal variables (n+1) computation
         eps_p_n1=eps_p_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         xi_n1=xi_n+gamma_n1*delta_t;
-        xibar_n1=xibar_n1-gamma_n1*delta_t*sign(sigma_trial-qbar);
+        xibar_n1=xibar_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
           
     end
     
@@ -118,7 +118,7 @@ elseif hard_type==2
         
         %Internal variables
         eps_p_n1=eps_p_n;
-        xi_n1=0;%xi_n;
+        xi_n1=xi_n;
         xibar_n1=xibar_n;
         q_n1=q_n;
         qbar_n1=qbar_n;
@@ -137,7 +137,7 @@ elseif hard_type==2
         %Internal variables (n+1) computation
         eps_p_n1=eps_p_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         xi_n1=xi_n+gamma_n1*delta_t;
-        xibar_n1=xibar_n1-gamma_n1*delta_t*sign(sigma_trial-qbar);
+        xibar_n1=xibar_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         
         sigma_n1=sigma_trial-gamma_n1*delta_t*E*sign(sigma_trial-qbar);
         q_n1=q_n-func(xi_n1,sigma_inf,sigma_y,delta,K)+func(xi_n,sigma_inf,sigma_y,delta,K);

@@ -54,7 +54,7 @@ VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 0.0001 ;
+eta = 0.000001 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------

@@ -123,7 +123,7 @@ elseif hard_type==2
         eps_p_n1=eps_p_n;
         
         %Internal variables
-        xi_n1=0;%xi_n;
+        xi_n1=xi_n;
         xibar_n1=xibar_n;
         q_n1=q_n;
         qbar_n1=qbar_n;
