@@ -27,7 +27,7 @@ while (abs(g_res)>tol && k<Max_Iter)
     g_res=ftrial-gamma_n1*delta_t*(E+H+eta/delta_t)-(func(xi_inc,sigma_inf,sigma_y,delta,K)-...
         func(xi_n,sigma_inf,sigma_y,delta,K));
     %Derivative of the residual
-    dgdxi=-(E+dfdxi(xi_inc,delta,K)+H+eta/delta_t)*delta_t;
+    dgdxi=-(E+dfdxi(xi_inc,sigma_inf,sigma_y,delta,K)+H+eta/delta_t)*delta_t;
     
     delta_gamma=-g_res/dgdxi;
 

@@ -33,7 +33,7 @@ K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
-HMod =0;%YOUNG_M/4;
+HMod =YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
@@ -50,11 +50,11 @@ HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'NO' ;
+VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 3000 ;
+eta = 0.0001 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
