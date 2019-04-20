@@ -33,11 +33,11 @@ K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
-HMod =YOUNG_M/4;
+HMod =0;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
-DeltaMod = 0.0;
+DeltaMod = 5000.0;
 
 % Yield stress
 % ------------
@@ -46,11 +46,11 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'YES' ;
+VISCOUS = 'NO' ;
 
 % Viscous coefficient ----
 % ------------------------
@@ -68,7 +68,7 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 35;
+sigma = 50;
 SIGMA = [sigma
         -sigma
         sigma];

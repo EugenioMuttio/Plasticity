@@ -18,6 +18,10 @@ xi_n=int_vars_n(5);
 xi_n1=int_vars_n(6);
 xibar_n=int_vars_n(7);
 xibar_n1=int_vars_n(8);
+q_n=int_vars_n(11);
+qbar_n=int_vars_n(13);
+q_n1=q_n;
+qbar_n1=qbar_n;
 
 %Elastic Sigma using the GIVEN strains
 sigma_nt=E*eps_n;
@@ -73,6 +77,9 @@ elseif hard_type==1
         %Internal variables
         xi_n1=xi_n;
         xibar_n1=xibar_n;
+        
+        q_n1=q_n;
+        qbar_n1=qbar_n;
     else
         ftrial=abs(sigma_trial-qbar)-sigma_y+q;
         % Sigma rate condition df/d(sigma)*sigma_trial>0
@@ -89,6 +96,9 @@ elseif hard_type==1
         %Internal variables (n+1) computation
         xi_n1=xi_n+gamma_n1;
         xibar_n1=xibar_n+gamma_n1*sign(sigma_trial-qbar);
+        
+        qbar_n1=qbar_n+gamma_n1*H*sign(sigma_trial-qbar_n);
+        q_n1=q_n-gamma_n1*K;
     end
     
 
@@ -96,27 +106,29 @@ elseif hard_type==1
 elseif hard_type==2
 %-- EXPONENTIAL SATURATION LAW + LINEAR HARDENING ------------------------
 %-------------------------------------------------------------------------
-    sigma_inf=1.3*sigma_y;
+    sigma_inf=1.2*sigma_y;
     %Exponential Saturation Law Function for NR
     func=@(xi,sigma_inf,sigma_y,delta,K)(sigma_inf-sigma_y)*(1-exp(-delta*xi))+K*xi;
     %Derivative Exponential Saturation Law Function for NR
-    dfdxi=@(xi,delta,K)(delta*exp(-delta*xi))+K;
+    dfdxi=@(xi,delta,K,sigma_inf,sigma_y)(sigma_inf-sigma_y)*(delta*exp(-delta*xi))+K;
     
     %Exponential saturation law
     q=-func(xi_n,sigma_inf,sigma_y,delta,K);
     qbar=H*xibar_n;
-    sigma_lim=sigma_y-q;
+    sigma_lim=sigma_y-q_n;
     
     % Sigma condition f(sigma)=0
-    if abs(round(sigma_trial-qbar,8))<=(round(sigma_lim,8))  
+    if abs(round(sigma_trial-qbar_n,8))<=(round(sigma_lim,8))  
         sigma_n1=sigma_trial;
         eps_p_n1=eps_p_n;
         
         %Internal variables
-        xi_n1=xi_n;
+        xi_n1=0;%xi_n;
         xibar_n1=xibar_n;
+        q_n1=q_n;
+        qbar_n1=qbar_n;
     else
-        ftrial=abs(sigma_trial-qbar)-sigma_y+q
+        ftrial=abs(sigma_trial-qbar_n)-sigma_y+q_n;
         % Sigma rate condition df/d(sigma)*sigma_trial>0
         if (sigma_rate_trial)*sign(sigma_trial)>0
             %Material parameters for evaluation inside NR
@@ -125,14 +137,18 @@ elseif hard_type==2
             gamma_n1=NR_1D(func,dfdxi,ftrial,mat_param);
             
         else
-            gamma_n1=0;
+            gamma_n1=0;            
         end
-        sigma_n1=sigma_trial-gamma_n1*E*sign(sigma_trial-qbar);
-        eps_p_n1=eps_p_n+gamma_n1*sign(sigma_trial-qbar);
+        
         
         %Internal variables (n+1) computation
         xi_n1=xi_n+gamma_n1;
-        xibar_n1=xibar_n+gamma_n1*sign(sigma_trial-qbar);
+        xibar_n1=xibar_n+gamma_n1*sign(sigma_trial-qbar_n);
+        q_n1=q_n-func(xi_n1,sigma_inf,sigma_y,delta,K)+func(xi_n,sigma_inf,sigma_y,delta,K);
+        qbar_n1=qbar_n+gamma_n1*H*sign(sigma_trial-qbar_n);
+        
+        sigma_n1=sigma_trial-gamma_n1*E*sign(sigma_trial-qbar_n);
+        eps_p_n1=eps_p_n+gamma_n1*sign(sigma_trial-qbar_n);
         
     end
     
@@ -151,6 +167,9 @@ int_vars_n1(6)=xi_n1;
 int_vars_n1(7)=xibar_n;
 int_vars_n1(8)=xibar_n1;
 int_vars_n1(10)=gamma_n1;
+int_vars_n1(12)=q_n1;
+int_vars_n1(14)=qbar_n1;
+
 
 
 
