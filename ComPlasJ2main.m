@@ -50,7 +50,7 @@ HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'YES' ;
+VISCOUS = 'NO' ;
 
 % Viscous coefficient ----
 % ------------------------
@@ -75,7 +75,7 @@ SIGMA = [sigma
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=20;
+istep=30;
 
 % ------------------------
 % ****************
@@ -107,23 +107,23 @@ Ce=elastic_tensor(matprop);
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep,POISSON);
 
-[strain_vec,sigma_vec,TIME]=PlasticityMainJ2(matprop,STRAIN,SIGMA,TimeTotal,istep);
+[strain_vec,sigma_vec,TIME]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
 
 figure(1)
 hold on
-plot(strain_vec,sigma_vec,'-o');
+plot(strain_vec(1,:),sigma_vec(1,:),'-o');
 
-figure(2)
-hold on
-plot(TIME,sigma_vec,'-o');
+% figure(2)
+% hold on
+% plot(TIME,sigma_vec,'-o');
 
 
 %%TEST
-nstrain=size(strain_vec);
-strstr=zeros(nstrain(1),2);
-strstr(:,1)=strain_vec;
-strstr(:,2)=sigma_vec;
-grid on;
+% nstrain=size(strain_vec);
+% strstr=zeros(nstrain(1),2);
+% strstr(:,1)=strain_vec;
+% strstr(:,2)=sigma_vec;
+% grid on;
 
 
 
