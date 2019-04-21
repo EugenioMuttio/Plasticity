@@ -1,4 +1,4 @@
-function [strain_vec,sigma_vec]= PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep)
+function [strain_vec,sigma_vec,TIME]= PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,9 +23,11 @@ gamma_vec=zeros(size(STRAIN));
 
 sigma_vec=zeros(size(STRAIN));
 strain_vec=zeros(size(STRAIN));
+TIME=zeros(size(STRAIN)); % initialize time variable
 
 for i=1:size(STRAIN)-1
     i=i+1;
+    TIME(i)=TIME(i-1)+delta_t;
     %strains
     eps_n=STRAIN(i-1);
     eps_n1=STRAIN(i);

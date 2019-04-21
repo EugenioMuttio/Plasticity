@@ -33,7 +33,7 @@ K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
-HMod =YOUNG_M/4;
+HMod =0;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
@@ -46,7 +46,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -54,11 +54,11 @@ VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 0.000001 ;
+eta = 1e4 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
-TimeTotal = 10 ;
+TimeTotal = 100 ;
 
 % Integration coefficient v (for mid-point rule)
 % ------------------------
@@ -105,11 +105,15 @@ matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta];
 
 STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
-[strain_vec,sigma_vec]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+[strain_vec,sigma_vec,TIME]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
 
+figure(1)
 hold on
 plot(strain_vec,sigma_vec,'-o');
 
+figure(2)
+hold on
+plot(TIME,sigma_vec,'-o');
 
 
 %%TEST
