@@ -21,37 +21,45 @@ clear all
 
 % YOUNG's MODULUS
 % ---------------
-YOUNG_M = 2.00E+11 ;
+YOUNG_M = 20000 ;
 
 % Poisson's coefficient
 % -----------------------
 POISSON = 0.3 ;
 
-% Plastic modulus
+% Isotropic modulus
 % ---------------------------
-K = -1.5 ;
+K =0;%YOUNG_M/4;
 
-% Kinematic Hardening/softening modulus
+% Kinematic modulus
 % ---------------------------
-H = -1.5 ;
+HMod =0;%YOUNG_M/4;
+
+% Modulus for Exponential Hardening
+% ---------------------------
+DeltaMod = 5000.0;
 
 % Yield stress
 % ------------
-YIELD_STRESS = 2.50E+08 ;
+YIELD_STRESS = 20 ;
 
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'EXPONENTIAL' ; %{LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'NO' ;
+VISCOUS = 'YES' ;
+
 % Viscous coefficient ----
 % ------------------------
-eta = 1 ;
+eta = 1e4 ;
+
 % TimeTotal (initial = 0) ----
 % ------------------------
-TimeTotal = 10 ;
+TimeTotal = 100 ;
+
 % Integration coefficient v (for mid-point rule)
 % ------------------------
 v = 1 ;
@@ -60,14 +68,62 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 3.50E+08;
+sigma = 50;
 SIGMA = [sigma
         -sigma
         sigma];
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=10;
-incrSigma = SIGMA/istep;
-incrStrain = iStrain(YOUNG_M,SIGMA,istep);
+istep=20;
+
+% ------------------------
+% ****************
+% FUNCTION CALLS
+% ****************- 
+switch  HARDTYPE
+    case 'PERFECT'
+        hard_type = 0  ;
+    case 'LINEAR'
+        hard_type = 1  ;
+    case 'EXPONENTIAL'
+        hard_type = 2  ;
+    otherwise
+        hard_type = 0  ;
+end
+
+switch  VISCOUS
+    case 'NO'
+        visc = 0  ;
+    case 'YES'
+        visc = 1  ;
+    otherwise
+        visc = 0  ;
+end
+
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta];
+
+STRAIN = iStrain(YOUNG_M,SIGMA,istep);
+
+[strain_vec,sigma_vec,TIME]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+
+figure(1)
+hold on
+plot(strain_vec,sigma_vec,'-o');
+
+figure(2)
+hold on
+plot(TIME,sigma_vec,'-o');
+
+
+%%TEST
+nstrain=size(strain_vec);
+strstr=zeros(nstrain(1),2);
+strstr(:,1)=strain_vec;
+strstr(:,2)=sigma_vec;
+grid on;
+
+
+
+
 
