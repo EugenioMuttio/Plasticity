@@ -8,6 +8,7 @@ clear all
 % Cadu
 % Marito
 % Agus
+% Chikhi
 % Euge
 % -------------------------------
 % 10-Abril-2019, Universidad Politecnica de Catalunya
