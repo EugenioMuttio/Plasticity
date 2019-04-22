@@ -31,7 +31,7 @@ for i=1:size(STRAIN,2)-1
     %strains
     eps_n=STRAIN(:,i-1);
     eps_n1=STRAIN(:,i);
-    eps_rate(:,i)=(STRAIN(:,i)-STRAIN(:,i-1))/delta_t;
+    eps_rate(:,i)=(eps_n1-eps_n)/delta_t;
     %internal variable: plastic strains
     eps_p_n=eps_pvec(:,i-1);
     eps_p_n1=eps_pvec(:,i);

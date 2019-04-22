@@ -105,7 +105,7 @@ matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta,POISSON];
 
 Ce=elastic_tensor(matprop);
 
-STRAIN = iStrain(YOUNG_M,SIGMA,istep,POISSON);
+STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
 
 [strain_vec,sigma_vec,TIME]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
 

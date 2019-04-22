@@ -2,7 +2,8 @@ function [sigma_n1,int_vars_n1] = maps_plasJ2(matprop,Ce,sigma_n,eps_rate,int_va
 
 %Material Properties
 E=matprop(1);
-mu = matprop(9);
+nu = matprop(9);
+mu = E/(2*(1+nu));
 sigma_y=matprop(2);
 hard_type=matprop(3);
 K=matprop(4);
@@ -38,15 +39,15 @@ qbar_trial = -2/3*H*xibar_n;%vector
 shp = (1/3)*(sigma_trial(1)+sigma_trial(2)+sigma_trial(3));
 dev_sigma_trial = sigma_trial-[shp shp shp 0 0 0]';
 
-n_trial = (1/norm(dev_sigma_trial-q_n))*(dev_sigma_trial-q_n);
+n_trial = ((dev_sigma_trial-qbar_trial)/norm(dev_sigma_trial-qbar_trial));
 
 %ELASTIC Sigma rate used only for the sign, to know when the rate 
 %changes from load -> unload
 sigma_rate_trial=(sigma_n1t-sigma_nt)/delta_t;
 
 %Parameter to include in the plasticity models
-gamma_n=int_vars_n(9); 
-gamma_n1=0*int_vars_n(9);
+%gamma_n=int_vars_n(9); 
+gamma_n1=int_vars_n(10);
 
 if hard_type==1
     
@@ -72,7 +73,7 @@ end
         qbar_n1=qbar_n;
     else
         % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (sigma_rate_trial(1))*sign(sigma_trial(1))>0
+        if (n_trial'*dev_sigma_trial)>0
             %Plastic Multiplier
             gamma_n1=((2*mu+2/3*K+2/3*H)^(-1))*ftrial;
         else
@@ -80,7 +81,8 @@ end
         end
         
         sigma_n1 = sigma_trial-gamma_n1*2*mu*n_trial;
-        q_n1 = q_trial-gamma_n1*K*sqrt(2/3);
+        %sigma_n1 = sigma_trial-gamma_n1*Ce*n_trial;
+        q_n1(1) = q_trial-gamma_n1*K*sqrt(2/3);
         qbar_n1 = qbar_trial+gamma_n1*2/3*H*n_trial;
         
         %Internal variables (n+1) computation

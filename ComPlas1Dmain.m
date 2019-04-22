@@ -50,11 +50,11 @@ HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'YES' ;
+VISCOUS = 'NO' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 1e4 ;
+eta = 5e4 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -111,9 +111,9 @@ figure(1)
 hold on
 plot(strain_vec,sigma_vec,'-o');
 
-figure(2)
-hold on
-plot(TIME,sigma_vec,'-o');
+% figure(2)
+% hold on
+% plot(TIME,sigma_vec,'-o');
 
 
 %%TEST
