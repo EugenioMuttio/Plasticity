@@ -6,7 +6,7 @@ function [strain_vec,sigma_vec,TIME]= PlasticityMain(matprop,STRAIN,SIGMA,TimeTo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %5 (paths)
-delta_t=TimeTotal/istep/5;
+delta_t=TimeTotal/(size(STRAIN,1)-1);
 
 % Strain Rate
 eps_rate=[];

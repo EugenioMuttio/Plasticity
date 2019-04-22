@@ -29,7 +29,7 @@ POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =0;%YOUNG_M/4;
+K =0.0%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
@@ -46,15 +46,15 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'NO' ;
+VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 5e4 ;
+eta = 5e3 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -75,7 +75,7 @@ SIGMA = [sigma
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=20;
+istep=40;
 
 % ------------------------
 % ****************

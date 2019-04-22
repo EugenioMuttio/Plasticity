@@ -33,7 +33,7 @@ while (abs(g_res)>tol && k<Max_Iter)
     k=k+1;
     %fprintf("Iteration %d - gamma= %e - g(xi)=%e\n",k,gamma_n1,g_res);
 end
-%fprintf("FOUND: Iteration %d - gamma= %e- g(xi)=%e \n",k,gamma_n1,g_res);
+fprintf("FOUND: Iteration %d - gamma= %e- g(xi)=%e \n",k,gamma_n1,g_res);
 
 
 

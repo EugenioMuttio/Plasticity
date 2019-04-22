@@ -1,4 +1,4 @@
-function [sigma_n1,int_vars_n1] = maps_plasJ2(matprop,Ce,sigma_n,eps_rate,int_vars_n,delta_t)
+function [sigma_n1,int_vars_n1,dev_sigma_n1] = maps_plasJ2(matprop,Ce,sigma_n,eps_rate,int_vars_n,delta_t)
 
 %Material Properties
 E=matprop(1);
@@ -32,11 +32,13 @@ sigma_n1t=Ce*eps_n1;
 %Sigma trial is considered as the elastic stress by using the GIVEN STRAINS
 % at time (n+1) minus the plastic strain COMPUTED at the step before
 % which initially is zero
+sigma_trial_n=Ce*(eps_n-eps_p_n);
 sigma_trial=Ce*(eps_n1-eps_p_n);
 q_trial=-K*xi_n(1);%scalar
 qbar_trial = -2/3*H*xibar_n;%vector
 
 shp = (1/3)*(sigma_trial(1)+sigma_trial(2)+sigma_trial(3));
+dev_sigma_trial_n = sigma_trial_n-[shp shp shp 0 0 0]';
 dev_sigma_trial = sigma_trial-[shp shp shp 0 0 0]';
 
 n_trial = ((dev_sigma_trial-qbar_trial)/norm(dev_sigma_trial-qbar_trial));
@@ -44,6 +46,7 @@ n_trial = ((dev_sigma_trial-qbar_trial)/norm(dev_sigma_trial-qbar_trial));
 %ELASTIC Sigma rate used only for the sign, to know when the rate 
 %changes from load -> unload
 sigma_rate_trial=(sigma_n1t-sigma_nt)/delta_t;
+dev_sigma_rate_trial=(dev_sigma_trial-dev_sigma_trial_n)/delta_t;
 
 %Parameter to include in the plasticity models
 %gamma_n=int_vars_n(9); 
@@ -73,7 +76,7 @@ end
         qbar_n1=qbar_n;
     else
         % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (n_trial'*dev_sigma_trial)>0
+        if (n_trial'*dev_sigma_rate_trial)>0
             %Plastic Multiplier
             gamma_n1=((2*mu+2/3*K+2/3*H)^(-1))*ftrial;
         else
@@ -90,6 +93,7 @@ end
         xi_n1 = [xi_n(1)+gamma_n1*sqrt(2/3) zeros(1,5)]';
         xibar_n1 = xibar_n-gamma_n1*n_trial;
     end
+    
     
 elseif hard_type==2
 %-- EXPONENTIAL SATURATION LAW + LINEAR HARDENING ------------------------
@@ -142,7 +146,8 @@ elseif hard_type==2
     
     
 end
-
+shp_n1 = (1/3)*(sigma_n1(1)+sigma_n1(2)+sigma_n1(3));
+dev_sigma_n1 = sigma_n1-[shp_n1 shp_n1 shp_n1 0 0 0]';
 
 
 %%UPDATE VALUES%%
