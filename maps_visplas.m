@@ -82,7 +82,7 @@ elseif hard_type==1
     else
         ftrial=abs(sigma_trial-qbar)-sigma_y+q;
         % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (sigma_rate_trial)*sign(sigma_trial)>0
+        if (sigma_rate_trial)*sign(sigma_trial-qbar)>0
             %Plastic Multiplier
             gamma_n1=((1/delta_t)*(E+K+H+eta/delta_t)^(-1))*ftrial;
         else
@@ -125,7 +125,7 @@ elseif hard_type==2
     else
         ftrial=abs(sigma_trial-qbar_n)-sigma_y+q_n;
         % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (sigma_rate_trial)*sign(sigma_trial)>0
+        if (sigma_rate_trial)*sign(sigma_trial-qbar)>0
             %Material parameters for evaluation inside NR
             mat_param=[xi_n E H K delta sigma_y sigma_inf eta delta_t];
             %Newton-Rapshon
