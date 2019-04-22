@@ -30,7 +30,7 @@ POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =YOUNG_M/4;
+K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
@@ -113,7 +113,7 @@ STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
 
 figure(1)
 hold on
-plot(strain_vec(1,:),sigma_vec(1,:),'-o');
+%plot(strain_vec(1,:),sigma_vec(1,:),'-o');
 plot(strain_vec(1,:),dev_sigma_vec(1,:),'-o');
 grid on;
 % figure(2)

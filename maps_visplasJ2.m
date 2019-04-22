@@ -1,4 +1,4 @@
-function [sigma_n1,int_vars_n1,dev_sigma_n1] = maps_plasJ2(matprop,Ce,sigma_n,eps_rate,int_vars_n,delta_t)
+function [sigma_n1,int_vars_n1,dev_sigma_n1] = maps_visplasJ2(matprop,Ce,sigma_n,eps_rate,int_vars_n,delta_t)
 
 %Material Properties
 E=matprop(1);
@@ -9,6 +9,7 @@ hard_type=matprop(3);
 K=matprop(4);
 H=matprop(5);
 delta=matprop(6);
+eta=matprop(8);
 
 %Internal Variables from last step
 int_vars_n1=int_vars_n;
@@ -80,20 +81,20 @@ if hard_type==1
         % Sigma rate condition df/d(sigma)*sigma_trial>0
         if (n_trial'*dev_sigma_rate_trial)>0
             %Plastic Multiplier
-            gamma_n1=((2*mu+2/3*K+2/3*H)^(-1))*ftrial;
+            gamma_n1=((2*mu+2/3*K+2/3*H+eta/delta_t)^(-1))*ftrial;
         else
             gamma_n1=0;
         end
         
-        sigma_n1 = sigma_trial-gamma_n1*2*mu*n_trial;
+        sigma_n1 = sigma_trial-gamma_n1*delta_t*2*mu*n_trial;
         %sigma_n1 = sigma_trial-gamma_n1*Ce*n_trial;
-        q_n1(1) = q_trial-gamma_n1*K*sqrt(2/3);
-        qbar_n1 = qbar_trial+gamma_n1*2/3*H*n_trial;
+        q_n1(1) = q_trial-gamma_n1*delta_t*K*sqrt(2/3);
+        qbar_n1 = qbar_trial+gamma_n1*delta_t*2/3*H*n_trial;
         
         %Internal variables (n+1) computation
-        eps_p_n1 = eps_p_n+gamma_n1*n_trial;
-        xi_n1 = [xi_n(1)+gamma_n1*sqrt(2/3) zeros(1,5)]';
-        xibar_n1 = xibar_n-gamma_n1*n_trial;
+        eps_p_n1 = eps_p_n+gamma_n1*delta_t*n_trial;
+        xi_n1 = [xi_n(1)+gamma_n1*delta_t*sqrt(2/3) zeros(1,5)]';
+        xibar_n1 = xibar_n-gamma_n1*delta_t*n_trial;
     end
     
     
@@ -125,7 +126,7 @@ elseif hard_type==2
          % Sigma rate condition df/d(sigma)*sigma_trial>0
         if (n_trial'*dev_sigma_rate_trial)>0
             %Material parameters for evaluation inside NR
-            mat_param=[xi_n(1) mu H K delta sigma_y sigma_inf];
+            mat_param=[xi_n(1) mu H K delta sigma_y sigma_inf eta delta_t];
             %Newton-Rapshon
             gamma_n1=NR_J2(func,dfdxi,ftrial,mat_param);
             
@@ -134,14 +135,15 @@ elseif hard_type==2
         end
         
         
-        %Internal variables (n+1) computation
-        xi_n1(1)=xi_n(1)+sqrt(2/3)*gamma_n1;
-        xibar_n1=xibar_n+gamma_n1*sign(sigma_trial-qbar_n);
-        q_n1(1)=q_trial-func(xi_n1(1),sigma_inf,sigma_y,delta,K)+func(xi_n(1),sigma_inf,sigma_y,delta,K);
-        qbar_n1=qbar_trial+gamma_n1*2/3*H*n_trial;
+        %Internal variables (n+1) computation        
+        xi_n1=[xi_n(1)+gamma_n1*delta_t*sqrt(2/3) zeros(1,5)]';
+        xibar_n1=xibar_n-gamma_n1*delta_t*n_trial;
+        %q_n1(1)=q_trial-func(xi_n1(1),sigma_inf,sigma_y,delta,K)+func(xi_n(1),sigma_inf,sigma_y,delta,K);
+        q_n1(1)=-func(xi_n1(1),sigma_inf,sigma_y,delta,K);
+        qbar_n1=qbar_trial+gamma_n1*delta_t*2/3*H*n_trial;
         
-        sigma_n1=sigma_trial-gamma_n1*2*mu*n_trial;
-        eps_p_n1=eps_p_n+gamma_n1*n_trial;
+        sigma_n1=sigma_trial-gamma_n1*delta_t*2*mu*n_trial;
+        eps_p_n1=eps_p_n+gamma_n1*delta_t*n_trial;
         
     end
     

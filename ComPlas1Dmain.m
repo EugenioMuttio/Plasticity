@@ -21,7 +21,7 @@ clear all
 
 % YOUNG's MODULUS
 % ---------------
-YOUNG_M = 20000 ;
+YOUNG_M = 200000 ;
 
 % Poisson's coefficient
 % -----------------------
@@ -37,7 +37,7 @@ HMod =0;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
-DeltaMod = 5000.0;
+DeltaMod = 8000.0;
 
 % Yield stress
 % ------------
@@ -46,7 +46,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
