@@ -91,7 +91,7 @@ elseif hard_type==1
         %Internal variables (n+1) computation
         eps_p_n1=eps_p_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         xi_n1=xi_n+gamma_n1*delta_t;
-        xibar_n1=xibar_n1-gamma_n1*delta_t*sign(sigma_trial-qbar);
+        xibar_n1=xibar_n1+gamma_n1*delta_t*sign(sigma_trial-qbar);
           
     end
     
