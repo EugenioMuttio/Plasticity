@@ -1,4 +1,4 @@
-function [strain_vec,sigma_vec,TIME]= PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep)
+function [strain_vec,sigma_vec,TIME,dev_sigma_vec]= PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -6,7 +6,7 @@ function [strain_vec,sigma_vec,TIME]= PlasticityMainJ2(matprop,Ce,STRAIN,TimeTot
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %5 (paths)
-delta_t=TimeTotal/istep/5;
+delta_t=TimeTotal/(size(STRAIN,2)-1);
 
 % Strain Rate
 eps_rate=zeros(size(STRAIN));
@@ -22,6 +22,7 @@ qbar_vec=zeros(size(STRAIN));%vector
 gamma_vec=zeros(size(STRAIN));
 
 sigma_vec=zeros(size(STRAIN));
+dev_sigma_vec=zeros(size(STRAIN));
 strain_vec=zeros(size(STRAIN));
 TIME=zeros(1,size(STRAIN,2)); % initialize time variable
 
@@ -55,7 +56,7 @@ for i=1:size(STRAIN,2)-1
     int_vars_nn1=[eps_n eps_n1 eps_p_n eps_p_n1 xi_n xi_n1 xibar_n xibar_n1 gamma_n gamma_n1 q_n q_n1 qbar_n qbar_n1];
     
     if visc==0
-        [sigma_vec(:,i),int_vars_nn1]=maps_plasJ2(matprop,Ce,sigma_vec(:,i-1),eps_rate(:,i),int_vars_nn1,delta_t);
+        [sigma_vec(:,i),int_vars_nn1,dev_sigma_vec(:,i)]=maps_plasJ2(matprop,Ce,sigma_vec(:,i-1),eps_rate(:,i),int_vars_nn1,delta_t);
     else
         [sigma_vec(:,i),int_vars_nn1]=maps_visplas(matprop,Ce,sigma_vec(:,i-1),eps_rate(:,i),int_vars_nn1,delta_t);
     end

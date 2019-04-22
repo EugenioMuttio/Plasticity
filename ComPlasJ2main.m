@@ -8,6 +8,7 @@ clear all
 % Cadu
 % Marito
 % Agus
+% Chikhi
 % Euge
 % -------------------------------
 % 10-Abril-2019, Universidad Politecnica de Catalunya
@@ -25,7 +26,7 @@ YOUNG_M = 20000 ;
 
 % Poisson's coefficient
 % -----------------------
-POISSON = 0.3 ;
+POISSON = 0.7 ;
 
 % Isotropic modulus
 % ---------------------------
@@ -107,12 +108,14 @@ Ce=elastic_tensor(matprop);
 
 STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
 
-[strain_vec,sigma_vec,TIME]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
+[strain_vec,sigma_vec,TIME,dev_sigma_vec]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
+
 
 figure(1)
 hold on
 plot(strain_vec(1,:),sigma_vec(1,:),'-o');
-
+plot(strain_vec(1,:),dev_sigma_vec(1,:),'-o');
+grid on;
 % figure(2)
 % hold on
 % plot(TIME,sigma_vec,'-o');
@@ -123,7 +126,7 @@ plot(strain_vec(1,:),sigma_vec(1,:),'-o');
 % strstr=zeros(nstrain(1),2);
 % strstr(:,1)=strain_vec;
 % strstr(:,2)=sigma_vec;
-% grid on;
+% 
 
 
 
