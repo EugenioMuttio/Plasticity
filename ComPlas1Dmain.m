@@ -29,7 +29,7 @@ POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =0.0%YOUNG_M/4;
+K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------

@@ -2,7 +2,7 @@ function gamma_n1 = NR_J2(func,dfdxi,ftrial,mat_p)
 
 %Material Properties
 xi_n=mat_p(1);
-E=mat_p(2);
+mu=mat_p(2);
 H=mat_p(3);
 K=mat_p(4);
 delta=mat_p(5);
@@ -20,12 +20,12 @@ tol=1*10^(-12);
 Max_Iter=100;
 
 while (abs(g_res)>tol && k<Max_Iter)
-    xi_inc=xi_n+gamma_n1;
+    xi_inc=xi_n+gamma_n1*sqrt(2/3);
     % Residual G 
-    g_res=ftrial-gamma_n1*(E+H)-(func(xi_inc,sigma_inf,sigma_y,delta,K)-...
+    g_res=ftrial-gamma_n1*(2*mu+2/3*H)-sqrt(2/3)*(func(xi_inc,sigma_inf,sigma_y,delta,K)-...
         func(xi_n,sigma_inf,sigma_y,delta,K));
     %Derivative of the residual
-    dgdxi=-(E+dfdxi(xi_inc,delta,K,sigma_inf,sigma_y)+H);
+    dgdxi=-(2*mu+2/3*dfdxi(xi_inc,delta,K,sigma_inf,sigma_y)+2/3*H);
     
     delta_gamma=-g_res/dgdxi;
 
@@ -33,7 +33,7 @@ while (abs(g_res)>tol && k<Max_Iter)
     k=k+1;
     %fprintf("Iteration %d - gamma= %e - g(xi)=%e\n",k,gamma_n1,g_res);
 end
-%fprintf("FOUND: Iteration %d - gamma= %e- g(xi)=%e \n",k,gamma_n1,g_res);
+fprintf("FOUND: Iteration %d - gamma= %e- g(xi)=%e \n",k,gamma_n1,g_res);
 
 
 

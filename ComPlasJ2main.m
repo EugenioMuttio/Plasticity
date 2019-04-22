@@ -26,11 +26,11 @@ YOUNG_M = 20000 ;
 
 % Poisson's coefficient
 % -----------------------
-POISSON = 0.7 ;
+POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =0;%YOUNG_M/4;
+K =YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
@@ -47,7 +47,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
