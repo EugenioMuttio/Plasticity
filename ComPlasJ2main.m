@@ -54,7 +54,7 @@ VISCOUS = 'NO' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 5e4 ;
+eta = 1e4 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -75,7 +75,7 @@ SIGMA = [sigma
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=20;
+istep=30;
 
 % ------------------------
 % ****************
@@ -101,15 +101,17 @@ switch  VISCOUS
         visc = 0  ;
 end
 
-matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta];
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta,POISSON];
 
-STRAIN = iStrain(YOUNG_M,SIGMA,istep);
+Ce=elastic_tensor(matprop);
 
-[strain_vec,sigma_vec,TIME]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
+
+[strain_vec,sigma_vec,TIME]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
 
 figure(1)
 hold on
-plot(strain_vec,sigma_vec,'-o');
+plot(strain_vec(1,:),sigma_vec(1,:),'-o');
 
 % figure(2)
 % hold on
@@ -117,11 +119,11 @@ plot(strain_vec,sigma_vec,'-o');
 
 
 %%TEST
-nstrain=size(strain_vec);
-strstr=zeros(nstrain(1),2);
-strstr(:,1)=strain_vec;
-strstr(:,2)=sigma_vec;
-grid on;
+% nstrain=size(strain_vec);
+% strstr=zeros(nstrain(1),2);
+% strstr(:,1)=strain_vec;
+% strstr(:,2)=sigma_vec;
+% grid on;
 
 
 

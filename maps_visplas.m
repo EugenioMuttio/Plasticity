@@ -1,4 +1,4 @@
-function [sigma_n1,int_vars_n1] = maps_plas(matprop,sigma_n,eps_rate,int_vars_n,delta_t)
+function [sigma_n1,int_vars_n1] = maps_visplas(matprop,sigma_n,eps_rate,int_vars_n,delta_t)
 
 %Material Properties
 E=matprop(1);
@@ -8,7 +8,6 @@ K=matprop(4);
 H=matprop(5);
 delta=matprop(6);
 eta=matprop(8);
-
 %Internal Variables from last step
 int_vars_n1=int_vars_n;
 eps_n=int_vars_n(1);
@@ -19,6 +18,10 @@ xi_n=int_vars_n(5);
 xi_n1=int_vars_n(6);
 xibar_n=int_vars_n(7);
 xibar_n1=int_vars_n(8);
+q_n=int_vars_n(11);
+qbar_n=int_vars_n(13);
+q_n1=q_n;
+qbar_n1=qbar_n;
 
 %Elastic Sigma using the GIVEN strains
 sigma_nt=E*eps_n;
@@ -79,7 +82,7 @@ elseif hard_type==1
     else
         ftrial=abs(sigma_trial-qbar)-sigma_y+q;
         % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (sigma_rate_trial)*sign(sigma_trial)>0
+        if (sigma_rate_trial)*sign(sigma_trial-qbar)>0
             %Plastic Multiplier
             gamma_n1=((1/delta_t)*(E+K+H+eta/delta_t)^(-1))*ftrial;
         else
@@ -91,36 +94,38 @@ elseif hard_type==1
         %Internal variables (n+1) computation
         eps_p_n1=eps_p_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         xi_n1=xi_n+gamma_n1*delta_t;
-        xibar_n1=xibar_n1+gamma_n1*delta_t*sign(sigma_trial-qbar);
+        xibar_n1=xibar_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
           
     end
     
 elseif hard_type==2
 %-- EXPONENTIAL SATURATION LAW + LINEAR HARDENING ------------------------
 %-------------------------------------------------------------------------
-    sigma_inf=200*sigma_y;
+    sigma_inf=1.2*sigma_y;
     %Exponential Saturation Law Function for NR
     func=@(xi,sigma_inf,sigma_y,delta,K)(sigma_inf-sigma_y)*(1-exp(-delta*xi))+K*xi;
     %Derivative Exponential Saturation Law Function for NR
-    dfdxi=@(xi,delta,K)(delta*exp(-delta*xi))+K;
+    dfdxi=@(xi,sigma_inf,sigma_y,delta,K)(sigma_inf-sigma_y)*(delta*exp(-delta*xi))+K;
     
     %Exponential saturation law
     q=-func(xi_n,sigma_inf,sigma_y,delta,K);
     qbar=H*xibar_n;
-    sigma_lim=sigma_y-q;
+    sigma_lim=sigma_y-q_n;
     
     % Sigma condition f(sigma)=0
-    if abs(round(sigma_trial-qbar,8))<=(round(sigma_lim,8))  
+    if abs(round(sigma_trial-qbar_n,8))<=(round(sigma_lim,8))  
         sigma_n1=sigma_trial;
         
         %Internal variables
         eps_p_n1=eps_p_n;
         xi_n1=xi_n;
         xibar_n1=xibar_n;
+        q_n1=q_n;
+        qbar_n1=qbar_n;
     else
-        ftrial=abs(sigma_trial-qbar)-sigma_y+q;
+        ftrial=abs(sigma_trial-qbar_n)-sigma_y+q_n;
         % Sigma rate condition df/d(sigma)*sigma_trial>0
-        if (sigma_rate_trial)*sign(sigma_trial)>0
+        if (sigma_rate_trial)*sign(sigma_trial-qbar)>0
             %Material parameters for evaluation inside NR
             mat_param=[xi_n E H K delta sigma_y sigma_inf eta delta_t];
             %Newton-Rapshon
@@ -129,12 +134,16 @@ elseif hard_type==2
         else
             gamma_n1=0;
         end
-        sigma_n1=sigma_trial-gamma_n1*delta_t*E*sign(sigma_trial-qbar);
-        
         %Internal variables (n+1) computation
         eps_p_n1=eps_p_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
         xi_n1=xi_n+gamma_n1*delta_t;
-        xibar_n1=xibar_n1-gamma_n1*delta_t*sign(sigma_trial-qbar);
+        xibar_n1=xibar_n+gamma_n1*delta_t*sign(sigma_trial-qbar);
+        
+        sigma_n1=sigma_trial-gamma_n1*delta_t*E*sign(sigma_trial-qbar);
+        q_n1=q_n-func(xi_n1,sigma_inf,sigma_y,delta,K)+func(xi_n,sigma_inf,sigma_y,delta,K);
+        qbar_n1=qbar_n+gamma_n1*delta_t*H*sign(sigma_trial-qbar_n);
+        
+        
         
     end
        
@@ -152,6 +161,8 @@ int_vars_n1(6)=xi_n1;
 int_vars_n1(7)=xibar_n;
 int_vars_n1(8)=xibar_n1;
 int_vars_n1(10)=gamma_n1;
+int_vars_n1(12)=q_n1;
+int_vars_n1(14)=qbar_n1;
 
 
 

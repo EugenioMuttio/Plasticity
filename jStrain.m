@@ -1,4 +1,4 @@
-function strain = iStrain(YOUNG_M,SIGMA,istep)
+function STRAIN = jStrain(YOUNG_M,SIGMA,istep,nu)
 
 strain =[0] ;
 a=0;
@@ -25,6 +25,7 @@ for i=1:size(SIGMA)
     end
 end
 
-strain = strain';
+STRAIN = [strain; -nu*strain ; -nu*strain ; zeros(1,size(strain,2)); zeros(1,size(strain,2));zeros(1,size(strain,2))];
+
    
     
