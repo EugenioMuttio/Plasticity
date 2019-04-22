@@ -8,6 +8,7 @@ clear all
 % Cadu
 % Marito
 % Agus
+% Chikhi
 % Euge
 % -------------------------------
 % 10-Abril-2019, Universidad Politecnica de Catalunya
@@ -25,11 +26,11 @@ YOUNG_M = 20000 ;
 
 % Poisson's coefficient
 % -----------------------
-POISSON = 0.3 ;
+POISSON = 0.7 ;
 
 % Isotropic modulus
 % ---------------------------
-K =0.0%YOUNG_M/4;
+K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
@@ -46,15 +47,15 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'YES' ;
+VISCOUS = 'NO' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 5e3 ;
+eta = 1e4 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -75,7 +76,7 @@ SIGMA = [sigma
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=40;
+istep=30;
 
 % ------------------------
 % ****************
@@ -101,27 +102,31 @@ switch  VISCOUS
         visc = 0  ;
 end
 
-matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta];
+matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod, DeltaMod,visc,eta,POISSON];
 
-STRAIN = iStrain(YOUNG_M,SIGMA,istep);
+Ce=elastic_tensor(matprop);
 
-[strain_vec,sigma_vec,TIME]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal,istep);
+STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
+
+[strain_vec,sigma_vec,TIME,dev_sigma_vec]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
+
 
 figure(1)
 hold on
-plot(strain_vec,sigma_vec,'-o');
-
+plot(strain_vec(1,:),sigma_vec(1,:),'-o');
+plot(strain_vec(1,:),dev_sigma_vec(1,:),'-o');
+grid on;
 % figure(2)
 % hold on
 % plot(TIME,sigma_vec,'-o');
 
 
 %%TEST
-nstrain=size(strain_vec);
-strstr=zeros(nstrain(1),2);
-strstr(:,1)=strain_vec;
-strstr(:,2)=sigma_vec;
-grid on;
+% nstrain=size(strain_vec);
+% strstr=zeros(nstrain(1),2);
+% strstr(:,1)=strain_vec;
+% strstr(:,2)=sigma_vec;
+% 
 
 
 
