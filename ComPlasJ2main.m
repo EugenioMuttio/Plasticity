@@ -22,11 +22,11 @@ clear all
 
 % YOUNG's MODULUS
 % ---------------
-YOUNG_M = 20000 ;
+YOUNG_M = 200000 ;
 
 % Poisson's coefficient
 % -----------------------
-POISSON = 0.7 ;
+POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
@@ -38,7 +38,7 @@ HMod =0;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
-DeltaMod = 5000.0;
+DeltaMod = 8000.0;
 
 % Yield stress
 % ------------
@@ -113,7 +113,7 @@ STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
 
 figure(1)
 hold on
-plot(strain_vec(1,:),sigma_vec(1,:),'-o');
+%plot(strain_vec(1,:),sigma_vec(1,:),'-o');
 plot(strain_vec(1,:),dev_sigma_vec(1,:),'-o');
 grid on;
 % figure(2)

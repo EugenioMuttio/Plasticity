@@ -58,7 +58,7 @@ for i=1:size(STRAIN,2)-1
     if visc==0
         [sigma_vec(:,i),int_vars_nn1,dev_sigma_vec(:,i)]=maps_plasJ2(matprop,Ce,sigma_vec(:,i-1),eps_rate(:,i),int_vars_nn1,delta_t);
     else
-        [sigma_vec(:,i),int_vars_nn1]=maps_visplas(matprop,Ce,sigma_vec(:,i-1),eps_rate(:,i),int_vars_nn1,delta_t);
+        [sigma_vec(:,i),int_vars_nn1,dev_sigma_vec(:,i)]=maps_visplasJ2(matprop,Ce,sigma_vec(:,i-1),eps_rate(:,i),int_vars_nn1,delta_t);
     end
     
     %strains

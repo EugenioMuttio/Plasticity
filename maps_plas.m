@@ -106,11 +106,7 @@ elseif hard_type==1
 elseif hard_type==2
 %-- EXPONENTIAL SATURATION LAW + LINEAR HARDENING ------------------------
 %-------------------------------------------------------------------------
-    %if eps_rate*sign(sigma_trial)>0
-        sigma_inf=1.2*sigma_y;
-    %else
-     %   sigma_inf=1.5*sigma_y;
-    %end
+    sigma_inf=2*sigma_y;
     %Exponential Saturation Law Function for NR
     func=@(xi,sigma_inf,sigma_y,delta,K)(sigma_inf-sigma_y)*(1-exp(-delta*xi))+K*xi;
     %Derivative Exponential Saturation Law Function for NR
