@@ -50,11 +50,11 @@ HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'NO' ;
+VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 5e3 ;
+eta = 1e-10 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -109,7 +109,7 @@ STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
 figure(1)
 hold on
-plot(strain_vec,sigma_vec,'-x','LineWidth',0.8, 'color','magenta');
+plot(strain_vec,sigma_vec,'-x','LineWidth',0.8, 'color','blue');
 xlabel('$\varepsilon$ [-]','Interpreter','latex') 
 ylabel('$\sigma$ [Pa]','Interpreter','latex')
 set(gca,'FontSize',12);

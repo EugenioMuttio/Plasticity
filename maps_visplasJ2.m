@@ -86,15 +86,15 @@ if hard_type==1
             gamma_n1=0;
         end
         
-        sigma_n1 = sigma_trial-gamma_n1*delta_t*2*mu*n_trial;
+        sigma_n1 = sigma_trial-gamma_n1*2*mu*n_trial;
         %sigma_n1 = sigma_trial-gamma_n1*Ce*n_trial;
-        q_n1(1) = q_trial-gamma_n1*delta_t*K*sqrt(2/3);
-        qbar_n1 = qbar_trial+gamma_n1*delta_t*2/3*H*n_trial;
+        q_n1(1) = q_trial-gamma_n1*K*sqrt(2/3);
+        qbar_n1 = qbar_trial+gamma_n1*2/3*H*n_trial;
         
         %Internal variables (n+1) computation
-        eps_p_n1 = eps_p_n+gamma_n1*delta_t*n_trial;
-        xi_n1 = [xi_n(1)+gamma_n1*delta_t*sqrt(2/3) zeros(1,5)]';
-        xibar_n1 = xibar_n-gamma_n1*delta_t*n_trial;
+        eps_p_n1 = eps_p_n+gamma_n1*n_trial;
+        xi_n1 = [xi_n(1)+gamma_n1*sqrt(2/3) zeros(1,5)]';
+        xibar_n1 = xibar_n-gamma_n1*n_trial;
     end
     
     

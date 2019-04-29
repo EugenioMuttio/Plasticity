@@ -59,7 +59,7 @@ eta = 1e-10 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
-TimeTotal = 100 ;
+TimeTotal = 50 ;
 
 % Integration coefficient v (for mid-point rule)
 % ------------------------
