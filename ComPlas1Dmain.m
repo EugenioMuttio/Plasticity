@@ -29,7 +29,7 @@ POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =0;%YOUNG_M/4;
+K =YOUNG_M/2;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
@@ -41,12 +41,12 @@ DeltaMod = 8000.0;
 
 % Yield stress
 % ------------
-YIELD_STRESS = 20 ;
+YIELD_STRESS = 20;
 
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -75,7 +75,7 @@ SIGMA = [sigma
 
 % Number of time increments for each load state
 % --------------------------------------- 
-istep=40;
+istep=20;
 
 % ------------------------
 % ****************
@@ -109,7 +109,10 @@ STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
 figure(1)
 hold on
-plot(strain_vec,sigma_vec,'-o');
+plot(strain_vec,sigma_vec,'-x','LineWidth',0.8, 'color','magenta');
+xlabel('$\varepsilon$ [-]','Interpreter','latex') 
+ylabel('$\sigma$ [Pa]','Interpreter','latex')
+set(gca,'FontSize',12);
 
 % figure(2)
 % hold on
