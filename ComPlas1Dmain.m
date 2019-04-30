@@ -49,7 +49,7 @@ YIELD_STRESS = 2.50E+08 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -57,8 +57,8 @@ VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = [5e10] ;
-%eta = [1 2e10 7e10 15e10];
+%eta = [5e10] ;
+eta = [1 2e10 7e10 15e10];
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -121,9 +121,9 @@ STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 %For Plotting Purposes and comparison of the parameters
 %It is needed to change the values in the vectors input of matprop and 
 %the function PlasticityMain depending which value want to compare
-for L=1:5
+for L=1:4
     
-    matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,Hmod(1), DeltaMod(L),visc,eta(1)];
+    matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,Hmod(1), DeltaMod(1),visc,eta(L)];
     [strain_vec,sigma_vec,TIME]=PlasticityMain(matprop,STRAIN,SIGMA,TimeTotal(1),istep);
     
 
@@ -158,7 +158,7 @@ for L=1:5
         plot(strain_vec(:,1),sigma_vec(:,1),'-*','LineWidth',2, 'color',[0.00 0.45 0.74]);
     elseif L==3
         plot(strain_vec(:,1),sigma_vec(:,1),'-*','LineWidth',2, 'color',[0.85 0.33 0.10]);
-    elseif L==5
+    elseif L==4
         plot(strain_vec(:,1),sigma_vec(:,1),'-*','LineWidth',2, 'color',[0.64 0.08 0.18]);
     else
         plot(strain_vec(:,1),sigma_vec(:,1),'-*','LineWidth',2, 'color',[0.93 0.69 0.13]);

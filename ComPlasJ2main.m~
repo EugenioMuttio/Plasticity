@@ -50,7 +50,7 @@ YIELD_STRESS = 2.50E+08 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -110,6 +110,7 @@ end
 
 
 
+STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
 
 %%
 %%%% SINGLE SIMULATION ------------------------------------------------..s
@@ -128,7 +129,7 @@ for L=1:4
     
     matprop=[YOUNG_M,YIELD_STRESS,hard_type,K,HMod(L), DeltaMod(1),visc,eta(1),POISSON];
     Ce=elastic_tensor(matprop);
-    STRAIN = jStrain(YOUNG_M,SIGMA,istep,POISSON);
+    
     [strain_vec,sigma_vec,TIME,dev_sigma_vec]=PlasticityMainJ2(matprop,Ce,STRAIN,TimeTotal,istep);
     
 
