@@ -47,7 +47,7 @@ YIELD_STRESS = 20 ;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -55,7 +55,7 @@ VISCOUS = 'NO' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 1e4 ;
+eta = 0 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------

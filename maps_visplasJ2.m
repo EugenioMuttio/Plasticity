@@ -128,7 +128,7 @@ elseif hard_type==2
             %Material parameters for evaluation inside NR
             mat_param=[xi_n(1) mu H K delta sigma_y sigma_inf eta delta_t];
             %Newton-Rapshon
-            gamma_n1=NR_J2(func,dfdxi,ftrial,mat_param);
+            gamma_n1=NR_J2vis(func,dfdxi,ftrial,mat_param);
             
         else
             gamma_n1=0;            
