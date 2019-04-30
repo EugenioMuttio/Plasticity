@@ -51,7 +51,7 @@ HARDTYPE = 'PERFECT' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
-VISCOUS = 'NO' ;
+VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
