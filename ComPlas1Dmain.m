@@ -29,15 +29,15 @@ POISSON = 0.3 ;
 
 % Isotropic modulus
 % ---------------------------
-K =YOUNG_M/2;%YOUNG_M/4;
+K =YOUNG_M/8;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
-HMod =0;%YOUNG_M/4;
+HMod =YOUNG_M/8;%YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
-DeltaMod = 8000.0;
+DeltaMod = 3000.0;
 
 % Yield stress
 % ------------
@@ -46,7 +46,7 @@ YIELD_STRESS = 20;
 
 % SOFTENING/HARDENING TYPE
 % ------------------------
-HARDTYPE = 'LINEAR' ; %{PERFECT,LINEAR,EXPONENTIAL}
+HARDTYPE = 'EXPONENTIAL' ; %{PERFECT,LINEAR,EXPONENTIAL}
 
 % VISCOUS/INVISCID
 % ------------------------
@@ -54,7 +54,7 @@ VISCOUS = 'YES' ;
 
 % Viscous coefficient ----
 % ------------------------
-eta = 1e-10 ;
+eta = 1e6 ;
 
 % TimeTotal (initial = 0) ----
 % ------------------------
@@ -68,7 +68,7 @@ v = 1 ;
 % ------------------------
 nloadstates = 3;
 SIGMA = zeros(nloadstates,1);
-sigma = 50;
+sigma = 100;
 SIGMA = [sigma
         -sigma
         sigma];
@@ -109,15 +109,17 @@ STRAIN = iStrain(YOUNG_M,SIGMA,istep);
 
 figure(1)
 hold on
-plot(strain_vec,sigma_vec,'-x','LineWidth',0.8, 'color','blue');
+plot(strain_vec,sigma_vec,'-o','LineWidth',0.8, 'color','red', 'MarkerSize',5); %red -o, blue -^, black -s, magenta -*
 xlabel('$\varepsilon$ [-]','Interpreter','latex') 
 ylabel('$\sigma$ [Pa]','Interpreter','latex')
 set(gca,'FontSize',12);
 
-% figure(2)
-% hold on
-% plot(TIME,sigma_vec,'-o');
-
+figure(2)
+hold on
+plot(TIME,sigma_vec,'-o','LineWidth',0.8, 'color','red', 'MarkerSize',5);
+xlabel('Time [s]','Interpreter','latex') 
+ylabel('$\sigma$ [Pa]','Interpreter','latex')
+set(gca,'FontSize',12);
 
 %%TEST
 nstrain=size(strain_vec);

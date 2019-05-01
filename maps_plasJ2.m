@@ -136,8 +136,9 @@ elseif hard_type==2
         
         %Internal variables (n+1) computation
         xi_n1(1)=xi_n(1)+sqrt(2/3)*gamma_n1;
-        xibar_n1=xibar_n+gamma_n1*sign(sigma_trial-qbar_n);
-        q_n1(1)=q_trial-func(xi_n1(1),sigma_inf,sigma_y,delta,K)+func(xi_n(1),sigma_inf,sigma_y,delta,K);
+        xibar_n1=xibar_n-gamma_n1*n_trial;
+        %q_n1(1)=q_trial-func(xi_n1(1),sigma_inf,sigma_y,delta,K)+func(xi_n(1),sigma_inf,sigma_y,delta,K);
+        q_n1(1)=-func(xi_n1(1),sigma_inf,sigma_y,delta,K);
         qbar_n1=qbar_trial+gamma_n1*2/3*H*n_trial;
         
         sigma_n1=sigma_trial-gamma_n1*2*mu*n_trial;

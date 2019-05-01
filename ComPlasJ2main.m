@@ -34,7 +34,7 @@ K =0;%YOUNG_M/4;
 
 % Kinematic modulus
 % ---------------------------
-HMod =0;%YOUNG_M/4;
+HMod =YOUNG_M/4;
 
 % Modulus for Exponential Hardening
 % ---------------------------
